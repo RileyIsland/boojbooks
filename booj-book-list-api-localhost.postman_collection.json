@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "5fc98051-b7f1-4743-980d-fa8643361dc8",
+		"name": "Booj Book List API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "BookList",
+			"item": [
+				{
+					"name": "PUT BookList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Create BookList"
+					},
+					"response": []
+				},
+				{
+					"name": "GET BookList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Get BookList with Books"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookData\": {\n        \"author\": \"Test Author 1\",\n        \"title\": \"Test Title 1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/api/book-list/1/book",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"book-list",
+								"1",
+								"book"
+							]
+						},
+						"description": "Create Book and add to BookList Books"
+					},
+					"response": []
+				},
+				{
+					"name": "POST Books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Clear and reassign BookList Books by given bookIds that belong to existing Books"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Delete Book from BookList"
+					},
+					"response": []
+				}
+			],
+			"description": "BookList related requests",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "GET Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Get Book"
+					},
+					"response": []
+				}
+			],
+			"description": "Book related requests",
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
