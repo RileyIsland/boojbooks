@@ -18,7 +18,7 @@ class WebController extends Controller
      * @return Response
      * @throws Exception if there is a problem retrieving the BookList
      */
-    public function __invoke(Request $request): Response
+    public function list(Request $request): Response
     {
         if ($request->hasCookie(self::COOKIE_NAME_BOOK_LIST_ID)) {
             $bookList = BookList::find($request->cookie(self::COOKIE_NAME_BOOK_LIST_ID));
@@ -34,5 +34,17 @@ class WebController extends Controller
                 ]
             )
             ->cookie(self::COOKIE_NAME_BOOK_LIST_ID, $bookList->id, 60);
+    }
+
+    /**
+     * Single Page Application - Book View
+     * @param Request $request
+     * @param int $bookId
+     * @return Response
+     * @throws Exception if the book is not found
+     */
+    public function details(Request $request, int $bookId): Response
+    {
+        return response()->view('web.index', compact($bookId));
     }
 }

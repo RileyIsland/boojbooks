@@ -14,4 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', WebController::class);
+Route::get('/', [WebController::class, 'list']);
+Route::get('/book/{bookId}', [WebController::class, 'details']);
