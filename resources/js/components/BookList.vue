@@ -166,6 +166,7 @@ export default {
         getBooks() {
             this.editingList = true;
             this.errorGettingBooks = false;
+            let error404 = false;
             axios
                 .get('/api/book-list/' + this.bookListId)
                 .then(data => {
@@ -177,9 +178,17 @@ export default {
                 })
                 .catch((err) => {
                     console.error(err);
-                    this.errorGettingBooks = true;
+                    if (err.response.status === 404) {
+                        error404 = true;
+                    } else {
+                        this.errorGettingBooks = true;
+                    }
                 })
                 .then(() => {
+                    if (error404) {
+                        this.createBookList();
+                        return;
+                    }
                     this.editingList = false;
                 });
         },

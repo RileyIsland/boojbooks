@@ -2075,6 +2075,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editingList = true;
       this.errorGettingBooks = false;
+      var error404 = false;
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/book-list/' + this.bookListId).then(function (data) {
         var books = data.data.bookList.books || [];
         books.forEach(function (book, index) {
@@ -2083,8 +2084,19 @@ __webpack_require__.r(__webpack_exports__);
         _this2.books = books;
       })["catch"](function (err) {
         console.error(err);
-        _this2.errorGettingBooks = true;
+
+        if (err.response.status === 404) {
+          error404 = true;
+        } else {
+          _this2.errorGettingBooks = true;
+        }
       }).then(function () {
+        if (error404) {
+          _this2.createBookList();
+
+          return;
+        }
+
         _this2.editingList = false;
       });
     },
