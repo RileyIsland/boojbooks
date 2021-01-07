@@ -7,7 +7,15 @@
                 <b-spinner label="Spinning"></b-spinner>
             </div>
         </div>
-        <div v-else-if="!errorGettingBooks">
+        <div v-else-if="errorGettingBookList">
+            Error Creating Book List
+            <b-button type="button" @click="createBookList">Try Again</b-button>
+        </div>
+        <div v-else-if="errorGettingBooks">
+            Error Getting Books
+            <b-button type="button" @click="getBooks">Try Again</b-button>
+        </div>
+        <div v-else>
             <div style="text-align: center">
                 <b-button variant="primary" v-b-modal.add-book-modal>Add a Book</b-button>
             </div>
@@ -94,10 +102,6 @@
                 </b-form>
             </b-modal>
         </div>
-        <div v-else>
-            Error Getting Books
-            <b-button type="button" @click="getBooks">Try Again</b-button>
-        </div>
     </div>
 </template>
 
@@ -107,9 +111,10 @@ import axios from "axios";
 export default {
     data() {
         return {
+            bookListId: null,
             bookToAdd: {
-                author: "",
-                title: ""
+                author: '',
+                title: ''
             },
             bookFields: [
                 {
@@ -132,14 +137,32 @@ export default {
             ],
             books: [],
             editingList: false,
+            errorGettingBookList: false,
             errorGettingBooks: false
         }
     },
-    props: ['bookListId'],
     mounted() {
-        this.getBooks();
+        if (this.$cookies.isKey('book_list_id')) {
+            this.bookListId = parseInt(this.$cookies.get('book_list_id'));
+            this.getBooks();
+        } else {
+            this.createBookList();
+        }
     },
     methods: {
+        createBookList() {
+            this.editingList = true;
+            axios.put('/api/book-list')
+                .then(data => {
+                    this.bookListId = data.data.bookList.id;
+                    this.$cookies.set('book_list_id', this.bookListId, '60m');
+                    this.getBooks()
+                })
+                .catch((err) => {
+                    console.error(err);
+                    this.errorGettingBookList = true;
+                });
+        },
         getBooks() {
             this.editingList = true;
             this.errorGettingBooks = false;
@@ -230,7 +253,7 @@ export default {
         },
         postBooks(bookIds) {
             axios.post(
-                '/api/book-list/' + this.bookListId,
+                '/api/book-list/' + this.bookListId + '/book',
                 {
                     bookIds: bookIds
                 }

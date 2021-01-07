@@ -5,55 +5,60 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookList;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BookListController extends Controller
 {
-    public function index(Request $request, $bookListId)
+    /**
+     * Create BookList
+     * @return JsonResponse
+     */
+    public function putBookList(): JsonResponse
     {
-        $bookList = BookList::with(
-            [
-                'books' => function ($query) use ($request) {
-                    $query->orderBy(
-                        $request->get('sortBy', 'pivot_id'),
-                        $request->get('sortAsc', 1) ? 'asc' : 'desc'
-                    );
-                }
-            ]
-        )
-            ->find($bookListId);
         return response()->json(
             [
-                'bookList' => $bookList
-            ]
+                'bookList' => BookList::create()->toArray()
+            ],
+            Response::HTTP_CREATED
         );
     }
 
-    public function postBooks(Request $request, $bookListId)
+    /**
+     * Get BookList
+     * @param Request $request
+     * @param int $bookListId
+     * @return JsonResponse
+     * @throws NotFoundHttpException
+     */
+    public function index(Request $request, int $bookListId): JsonResponse
     {
-        $bookList = BookList::find($bookListId);
-        $bookIds = $request->get('bookIds', []);
-        $books = Book::whereIn('id', $bookIds)->get();
-        $bookList->books()->sync([]);
-        $bookList->books()->sync(array_intersect($bookIds, $books->pluck('id')->toArray()));
+        return response()->json([
+            'bookList' => BookList
+                ::with([
+                    'books' => function ($query) use ($request) {
+                        $query->orderBy(
+                            $request->get('sortBy', 'pivot_id'),
+                            $request->get('sortAsc', 1) ? 'asc' : 'desc'
+                        );
+                    }
+                ])
+                ->findOrFail($bookListId)
+        ]);
     }
 
     /**
+     * Create Book and add to BookList Books
      * @param Request $request
-     * @param $bookListId
-     * @return JsonResponse|Response
-     * @throws Exception
+     * @param int $bookListId
+     * @return JsonResponse
      */
-    public function putBook(Request $request, $bookListId)
+    public function putBook(Request $request, int $bookListId): JsonResponse
     {
         $bookList = BookList::with('books')->find($bookListId);
         $bookData = $request->get('bookData');
-        if (!$bookData['author'] || !$bookData['title']) {
-            throw new Exception('Book Data Incomplete');
-        }
         $book = Book::firstOrCreate([
             'author' => $bookData['author'],
             'title' => $bookData['title'],
@@ -61,16 +66,39 @@ class BookListController extends Controller
         $books = $bookList->books;
         $books->push($book);
         $bookList->books()->sync($books->pluck('id'));
-        return response([], Response::HTTP_CREATED);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
-    public function deleteBook($bookListId, $bookId)
+    /**
+     * Clear and reassign BookList Books by given bookIds that belong to existing Books
+     * @param Request $request
+     * @param int $bookListId
+     * @return JsonResponse
+     */
+    public function postBooks(Request $request, int $bookListId): JsonResponse
+    {
+        $bookList = BookList::find($bookListId);
+        $bookIds = $request->get('bookIds', []);
+        $books = Book::whereIn('id', $bookIds)->get();
+        // Need to empty old Books or else BookBookList order will not properly reflect request order
+        $bookList->books()->sync([]);
+        $bookList->books()->sync(array_intersect($bookIds, $books->pluck('id')->toArray()));
+        return response()->json([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Delete Book from BookList
+     * @param int $bookListId
+     * @param int $bookId
+     * @return JsonResponse
+     */
+    public function deleteBook(int $bookListId, int $bookId): JsonResponse
     {
         $bookList = BookList::with('books')->find($bookListId);
         $booksToKeep = $bookList->books->filter(function ($book) use ($bookId) {
             return $book->id != $bookId;
         });
         $bookList->books()->sync($booksToKeep->pluck('id'));
-        return response([], Response::HTTP_NO_CONTENT);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

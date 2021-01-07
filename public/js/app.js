@@ -2013,13 +2013,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      bookListId: null,
       bookToAdd: {
-        author: "",
-        title: ""
+        author: '',
+        title: ''
       },
       bookFields: [{
         key: 'order',
@@ -2037,16 +2042,36 @@ __webpack_require__.r(__webpack_exports__);
       }],
       books: [],
       editingList: false,
+      errorGettingBookList: false,
       errorGettingBooks: false
     };
   },
-  props: ['bookListId'],
   mounted: function mounted() {
-    this.getBooks();
+    if (this.$cookies.isKey('book_list_id')) {
+      this.bookListId = parseInt(this.$cookies.get('book_list_id'));
+      this.getBooks();
+    } else {
+      this.createBookList();
+    }
   },
   methods: {
-    getBooks: function getBooks() {
+    createBookList: function createBookList() {
       var _this = this;
+
+      this.editingList = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().put('/api/book-list').then(function (data) {
+        _this.bookListId = data.data.bookList.id;
+
+        _this.$cookies.set('book_list_id', _this.bookListId, '60m');
+
+        _this.getBooks();
+      })["catch"](function (err) {
+        console.error(err);
+        _this.errorGettingBookList = true;
+      });
+    },
+    getBooks: function getBooks() {
+      var _this2 = this;
 
       this.editingList = true;
       this.errorGettingBooks = false;
@@ -2055,29 +2080,29 @@ __webpack_require__.r(__webpack_exports__);
         books.forEach(function (book, index) {
           book.order = index + 1;
         });
-        _this.books = books;
+        _this2.books = books;
       })["catch"](function (err) {
         console.error(err);
-        _this.errorGettingBooks = true;
+        _this2.errorGettingBooks = true;
       }).then(function () {
-        _this.editingList = false;
+        _this2.editingList = false;
       });
     },
     addBook: function addBook() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.editingList = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default().put('/api/book-list/' + this.bookListId + '/book', {
         bookListId: this.bookListId,
         bookData: this.bookToAdd
       }).then(function () {
-        _this2.bookToAdd.author = "";
-        _this2.bookToAdd.title = "";
+        _this3.bookToAdd.author = "";
+        _this3.bookToAdd.title = "";
 
-        _this2.getBooks();
+        _this3.getBooks();
       })["catch"](function (err) {
         console.error(err);
-        _this2.editingList = false;
+        _this3.editingList = false;
         alert('Failed to add book');
       });
     },
@@ -2133,15 +2158,15 @@ __webpack_require__.r(__webpack_exports__);
       this.postBooks(bookIds);
     },
     postBooks: function postBooks(bookIds) {
-      var _this3 = this;
+      var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/book-list/' + this.bookListId, {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/book-list/' + this.bookListId + '/book', {
         bookIds: bookIds
       }).then(function () {
-        _this3.getBooks();
+        _this4.getBooks();
       })["catch"](function (err) {
         console.error(err);
-        _this3.editingList = false;
+        _this4.editingList = false;
         alert('Failed to reorder books');
       });
     }
@@ -2158,25 +2183,29 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
-/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/icons/plugin.js");
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
-/* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
-/* harmony import */ var bootstrap_vue_dist_bootstrap_vue_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap-vue/dist/bootstrap-vue.css */ "./node_modules/bootstrap-vue/dist/bootstrap-vue.css");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
+/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/icons/plugin.js");
+/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-cookies */ "./node_modules/vue-cookies/vue-cookies.js");
+/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_cookies__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
+/* harmony import */ var bootstrap_vue_dist_bootstrap_vue_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap-vue/dist/bootstrap-vue.css */ "./node_modules/bootstrap-vue/dist/bootstrap-vue.css");
 
 
 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_3__.default.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_4__.BootstrapVue);
-vue__WEBPACK_IMPORTED_MODULE_3__.default.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_5__.IconsPlugin);
-vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_6__.default);
-var vm = new vue__WEBPACK_IMPORTED_MODULE_3__.default({
+
+vue__WEBPACK_IMPORTED_MODULE_4__.default.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_5__.BootstrapVue);
+vue__WEBPACK_IMPORTED_MODULE_4__.default.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_6__.IconsPlugin);
+vue__WEBPACK_IMPORTED_MODULE_4__.default.use((vue_cookies__WEBPACK_IMPORTED_MODULE_0___default()));
+vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_7__.default);
+var vm = new vue__WEBPACK_IMPORTED_MODULE_4__.default({
   el: '#app',
-  router: new vue_router__WEBPACK_IMPORTED_MODULE_6__.default(_routes__WEBPACK_IMPORTED_MODULE_0__.default)
+  router: new vue_router__WEBPACK_IMPORTED_MODULE_7__.default(_routes__WEBPACK_IMPORTED_MODULE_1__.default)
 });
 
 /***/ }),
@@ -48405,6 +48434,156 @@ module.exports = function (list, options) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-cookies/vue-cookies.js":
+/*!*************************************************!*\
+  !*** ./node_modules/vue-cookies/vue-cookies.js ***!
+  \*************************************************/
+/***/ ((module) => {
+
+/**
+ * Vue Cookies v1.7.4
+ * https://github.com/cmp-cc/vue-cookies
+ *
+ * Copyright 2016, cmp-cc
+ * Released under the MIT license
+ */
+
+(function () {
+
+  var defaultConfig = {
+    expires: '1d',
+    path: '; path=/',
+    domain: '',
+    secure: '',
+    sameSite: '; SameSite=Lax'
+  };
+
+  var VueCookies = {
+    // install of Vue
+    install: function (Vue) {
+      Vue.prototype.$cookies = this;
+      Vue.$cookies = this;
+    },
+    config: function (expireTimes, path, domain, secure, sameSite) {
+      defaultConfig.expires = expireTimes ? expireTimes : '1d';
+      defaultConfig.path = path ? '; path=' + path : '; path=/';
+      defaultConfig.domain = domain ? '; domain=' + domain : '';
+      defaultConfig.secure = secure ? '; Secure' : '';
+      defaultConfig.sameSite = sameSite ? '; SameSite=' + sameSite : '; SameSite=Lax';
+    },
+    get: function (key) {
+      var value = decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
+
+      if (value && value.substring(0, 1) === '{' && value.substring(value.length - 1, value.length) === '}') {
+        try {
+          value = JSON.parse(value);
+        } catch (e) {
+          return value;
+        }
+      }
+      return value;
+    },
+    set: function (key, value, expireTimes, path, domain, secure, sameSite) {
+      if (!key) {
+        throw new Error('Cookie name is not find in first argument.');
+      } else if (/^(?:expires|max\-age|path|domain|secure|SameSite)$/i.test(key)) {
+        throw new Error('Cookie key name illegality, Cannot be set to ["expires","max-age","path","domain","secure","SameSite"]\t current key name: ' + key);
+      }
+      // support json object
+      if (value && value.constructor === Object) {
+        value = JSON.stringify(value);
+      }
+      var _expires = '';
+      expireTimes = expireTimes == undefined ? defaultConfig.expires : expireTimes;
+      if (expireTimes && expireTimes != 0) {
+        switch (expireTimes.constructor) {
+          case Number:
+            if (expireTimes === Infinity || expireTimes === -1) _expires = '; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+            else _expires = '; max-age=' + expireTimes;
+            break;
+          case String:
+            if (/^(?:\d+(y|m|d|h|min|s))$/i.test(expireTimes)) {
+              // get capture number group
+              var _expireTime = expireTimes.replace(/^(\d+)(?:y|m|d|h|min|s)$/i, '$1');
+              // get capture type group , to lower case
+              switch (expireTimes.replace(/^(?:\d+)(y|m|d|h|min|s)$/i, '$1').toLowerCase()) {
+                  // Frequency sorting
+                case 'm':
+                  _expires = '; max-age=' + +_expireTime * 2592000;
+                  break; // 60 * 60 * 24 * 30
+                case 'd':
+                  _expires = '; max-age=' + +_expireTime * 86400;
+                  break; // 60 * 60 * 24
+                case 'h':
+                  _expires = '; max-age=' + +_expireTime * 3600;
+                  break; // 60 * 60
+                case 'min':
+                  _expires = '; max-age=' + +_expireTime * 60;
+                  break; // 60
+                case 's':
+                  _expires = '; max-age=' + _expireTime;
+                  break;
+                case 'y':
+                  _expires = '; max-age=' + +_expireTime * 31104000;
+                  break; // 60 * 60 * 24 * 30 * 12
+                default:
+                  new Error('unknown exception of "set operation"');
+              }
+            } else {
+              _expires = '; expires=' + expireTimes;
+            }
+            break;
+          case Date:
+            _expires = '; expires=' + expireTimes.toUTCString();
+            break;
+        }
+      }
+      document.cookie =
+          encodeURIComponent(key) + '=' + encodeURIComponent(value) +
+          _expires +
+          (domain ? '; domain=' + domain : defaultConfig.domain) +
+          (path ? '; path=' + path : defaultConfig.path) +
+          (secure == undefined ? defaultConfig.secure : secure ? '; Secure' : '') +
+          (sameSite == undefined ? defaultConfig.sameSite : (sameSite ? '; SameSite=' + sameSite : ''));
+      return this;
+    },
+    remove: function (key, path, domain) {
+      if (!key || !this.isKey(key)) {
+        return false;
+      }
+      document.cookie = encodeURIComponent(key) +
+          '=; expires=Thu, 01 Jan 1970 00:00:00 GMT' +
+          (domain ? '; domain=' + domain : defaultConfig.domain) +
+          (path ? '; path=' + path : defaultConfig.path) +
+          '; SameSite=Lax';
+      return this;
+    },
+    isKey: function (key) {
+      return (new RegExp('(?:^|;\\s*)' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=')).test(document.cookie);
+    },
+    keys: function () {
+      if (!document.cookie) return [];
+      var _keys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, '').split(/\s*(?:\=[^;]*)?;\s*/);
+      for (var _index = 0; _index < _keys.length; _index++) {
+        _keys[_index] = decodeURIComponent(_keys[_index]);
+      }
+      return _keys;
+    }
+  };
+
+  if (true) {
+    module.exports = VueCookies;
+  } else {}
+  // vue-cookies can exist independently,no dependencies library
+  if (typeof window !== 'undefined') {
+    window.$cookies = VueCookies;
+  }
+
+})();
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-functional-data-merge/dist/lib.esm.js":
 /*!****************************************************************!*\
   !*** ./node_modules/vue-functional-data-merge/dist/lib.esm.js ***!
@@ -48657,8 +48836,33 @@ var render = function() {
             1
           )
         ])
-      : !_vm.errorGettingBooks
+      : _vm.errorGettingBookList
       ? _c(
+          "div",
+          [
+            _vm._v("\n        Error Creating Book List\n        "),
+            _c(
+              "b-button",
+              { attrs: { type: "button" }, on: { click: _vm.createBookList } },
+              [_vm._v("Try Again")]
+            )
+          ],
+          1
+        )
+      : _vm.errorGettingBooks
+      ? _c(
+          "div",
+          [
+            _vm._v("\n        Error Getting Books\n        "),
+            _c(
+              "b-button",
+              { attrs: { type: "button" }, on: { click: _vm.getBooks } },
+              [_vm._v("Try Again")]
+            )
+          ],
+          1
+        )
+      : _c(
           "div",
           [
             _c(
@@ -48916,18 +49120,6 @@ var render = function() {
                 )
               ],
               1
-            )
-          ],
-          1
-        )
-      : _c(
-          "div",
-          [
-            _vm._v("\n        Error Getting Books\n        "),
-            _c(
-              "b-button",
-              { attrs: { type: "button" }, on: { click: _vm.getBooks } },
-              [_vm._v("Try Again")]
             )
           ],
           1

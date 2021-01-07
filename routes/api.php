@@ -20,15 +20,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('book-list/{bookListId}')
-    ->group(function () {
+Route::prefix('book-list')->group(function () {
+    Route::put('/', [BookListController::class, 'putBookList']);
+    Route::prefix('{bookListId}')->group(function () {
         Route::get('/', [BookListController::class, 'index']);
-        Route::post('/', [BookListController::class, 'postBooks']);
-        Route::prefix('book')
-            ->group(function () {
-                Route::put('/', [BookListController::class, 'putBook']);
-                Route::delete('{bookId}', [BookListController::class, 'deleteBook']);
-            });
+        Route::prefix('book')->group(function () {
+            Route::put('/', [BookListController::class, 'putBook']);
+            Route::post('/', [BookListController::class, 'postBooks']);
+            Route::delete('{bookId}', [BookListController::class, 'deleteBook']);
+        });
     });
+});
 
 Route::get('book/{bookId}', [BookController::class, 'index']);

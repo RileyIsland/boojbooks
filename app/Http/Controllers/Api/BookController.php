@@ -4,16 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BookController extends Controller
 {
-    public function index($bookId)
+    /**
+     * Get Book
+     * @param int $bookId
+     * @return JsonResponse
+     * @throws NotFoundHttpException
+     */
+    public function index(int $bookId): JsonResponse
     {
-        $book = Book::findOrFail($bookId);
-        return response()->json(
-            [
-                'book' => $book
-            ]
-        );
+        return response()->json([
+            'book' => Book::findOrFail($bookId)
+        ]);
     }
 }
