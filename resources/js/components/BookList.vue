@@ -152,10 +152,10 @@ export default {
     methods: {
         createBookList() {
             this.editingList = true;
-            axios.put('/api/book-list')
+            axios.put('/api/book-list', {})
                 .then(data => {
                     this.bookListId = data.data.bookList.id;
-                    this.$cookies.set('book_list_id', this.bookListId, '60m');
+                    this.$cookies.set('book_list_id', this.bookListId, '7d');
                     this.getBooks()
                 })
                 .catch((err) => {

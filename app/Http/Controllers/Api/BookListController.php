@@ -14,7 +14,7 @@ class BookListController extends Controller
 {
     /**
      * Create BookList
-     * @return JsonResponse
+     * @return JsonResponse BookList
      */
     public function putBookList(): JsonResponse
     {
@@ -30,10 +30,10 @@ class BookListController extends Controller
      * Get BookList
      * @param Request $request
      * @param int $bookListId
-     * @return JsonResponse
+     * @return JsonResponse BookList
      * @throws NotFoundHttpException
      */
-    public function index(Request $request, int $bookListId): JsonResponse
+    public function getBookList(Request $request, int $bookListId): JsonResponse
     {
         return response()->json([
             'bookList' => BookList
@@ -53,10 +53,11 @@ class BookListController extends Controller
      * Create Book and add to BookList Books
      * @param Request $request
      * @param int $bookListId
-     * @return JsonResponse
+     * @return JsonResponse no content
      */
     public function putBook(Request $request, int $bookListId): JsonResponse
     {
+        /** @var BookList $bookList */
         $bookList = BookList::with('books')->find($bookListId);
         $bookData = $request->get('bookData');
         $book = Book::firstOrCreate([
@@ -73,14 +74,14 @@ class BookListController extends Controller
      * Clear and reassign BookList Books by given bookIds that belong to existing Books
      * @param Request $request
      * @param int $bookListId
-     * @return JsonResponse
+     * @return JsonResponse no content
      */
     public function postBooks(Request $request, int $bookListId): JsonResponse
     {
         $bookList = BookList::find($bookListId);
         $bookIds = $request->get('bookIds', []);
         $books = Book::whereIn('id', $bookIds)->get();
-        // Need to empty old Books or else BookBookList order will not properly reflect request order
+        // Need to empty old Books or BookBookList order will not properly reflect request order after actual sync
         $bookList->books()->sync([]);
         $bookList->books()->sync(array_intersect($bookIds, $books->pluck('id')->toArray()));
         return response()->json([], Response::HTTP_NO_CONTENT);
@@ -90,7 +91,7 @@ class BookListController extends Controller
      * Delete Book from BookList
      * @param int $bookListId
      * @param int $bookId
-     * @return JsonResponse
+     * @return JsonResponse no content
      */
     public function deleteBook(int $bookListId, int $bookId): JsonResponse
     {

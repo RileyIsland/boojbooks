@@ -1,11 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "rileyisland/boojbooks",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "description": "Booj Book List",
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
@@ -16,13 +12,13 @@
         "laravel/tinker": "^2.5"
     },
     "require-dev": {
+        "ext-json": "*",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3",
-      "ext-json": "*"
+        "phpunit/phpunit": "^9.3.3"
     },
     "config": {
         "optimize-autoloader": true,

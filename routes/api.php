@@ -20,10 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('book/{bookId}', [BookController::class, 'getBook']);
+
 Route::prefix('book-list')->group(function () {
     Route::put('/', [BookListController::class, 'putBookList']);
     Route::prefix('{bookListId}')->group(function () {
-        Route::get('/', [BookListController::class, 'index']);
+        Route::get('/', [BookListController::class, 'getBookList']);
         Route::prefix('book')->group(function () {
             Route::put('/', [BookListController::class, 'putBook']);
             Route::post('/', [BookListController::class, 'postBooks']);
@@ -31,5 +33,3 @@ Route::prefix('book-list')->group(function () {
         });
     });
 });
-
-Route::get('book/{bookId}', [BookController::class, 'index']);

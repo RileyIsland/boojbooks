@@ -6,9 +6,6 @@ export default {
     routes: [
         {
             path: '/',
-            props: {
-                bookListId: bookListId
-            },
             component: BookList
         },
         {

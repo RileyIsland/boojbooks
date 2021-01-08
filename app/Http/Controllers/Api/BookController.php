@@ -15,7 +15,7 @@ class BookController extends Controller
      * @return JsonResponse
      * @throws NotFoundHttpException
      */
-    public function index(int $bookId): JsonResponse
+    public function getBook(int $bookId): JsonResponse
     {
         return response()->json([
             'book' => Book::findOrFail($bookId)
