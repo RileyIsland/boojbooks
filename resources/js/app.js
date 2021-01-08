@@ -12,7 +12,7 @@ Vue.use(IconsPlugin);
 Vue.use(VueCookies);
 Vue.use(VueRouter);
 
-const vm = new Vue({
+new Vue({
     el: '#app',
     router: new VueRouter(routes)
 });

@@ -9,9 +9,6 @@
 <div id="app">
     <router-view></router-view>
 </div>
-<script>
-    const bookListId = parseInt("{{ $bookListId ?? '' }}");
-</script>
 <script src="/js/app.js"></script>
 </body>
 </html>
