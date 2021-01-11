@@ -45,4 +45,12 @@ Once you follow the previous steps:
 * Navigate to localhost in your browser to play with the Vue app
 * Run `./vendor/bin/sail test` in the command line to run the tests
 
-### Deployment to Production (Under Construction)
+### Deployment to Production:
+
+I chose Elastic Beanstalk and was able to deploy the site
+at http://rileyislandboojbooks-env.eba-g8uj9mjg.us-east-2.elasticbeanstalk.com/. I will leave this instance up and
+running until the site has been reasonably assessed by the Booj and Re/Max team.
+
+Ideally if this were a project in need of a more CI/CD-based approach, I would have used Elastic CodePipeline to fire
+off automated tests and automatically deploy on every git merge. However, I am admittedly pretty green to setting up a
+deployment from scratch. So this was a good first step to just deploy an application.
