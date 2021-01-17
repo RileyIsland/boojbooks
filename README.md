@@ -41,7 +41,7 @@ In order to use the app on a local computer:
 
 Once you follow the previous steps:
 
-* Import the "booj-book-list-api-localhost.postman_collection.json" to your PostMan app to play with the API
+* Import the "booj-book-list-api.postman_collection.json" to your PostMan app to play with the API
 * Navigate to localhost in your browser to play with the Vue app
 * Run `./vendor/bin/sail test` in the command line to run the tests
 

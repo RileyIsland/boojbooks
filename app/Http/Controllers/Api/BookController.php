@@ -3,14 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Book;
+use App\Repositories\Interfaces\BookRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @package App\Http\Controllers\Api
+ */
 class BookController extends Controller
 {
+    /** @var BookRepositoryInterface */
+    private $bookRepository;
+
     /**
-     * Get Book
+     * @param BookRepositoryInterface $bookRepository
+     */
+    public function __construct(BookRepositoryInterface $bookRepository)
+    {
+        $this->bookRepository = $bookRepository;
+    }
+
+    /**
      * @param int $bookId
      * @return JsonResponse
      * @throws NotFoundHttpException
@@ -18,7 +31,7 @@ class BookController extends Controller
     public function getBook(int $bookId): JsonResponse
     {
         return response()->json([
-            'book' => Book::findOrFail($bookId)
+            'book' => $this->bookRepository->findOrFail($bookId)
         ]);
     }
 }

@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "2b367b64-dbb3-47c2-b0b9-7572e05b5bfc",
+		"name": "Booj Book List API",
+		"description": "Booj BookList API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "BookList",
+			"item": [
+				{
+					"name": "PUT BookList",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}{{domain}}/api/book-list",
+							"host": [
+								"{{scheme}}{{domain}}"
+							],
+							"path": [
+								"api",
+								"book-list"
+							]
+						},
+						"description": "Create BookList"
+					},
+					"response": []
+				},
+				{
+					"name": "GET BookList",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}{{domain}}/api/book-list/2",
+							"host": [
+								"{{scheme}}{{domain}}"
+							],
+							"path": [
+								"api",
+								"book-list",
+								"2"
+							]
+						},
+						"description": "Get BookList with Books"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT BookList Book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookData\": {\n        \"author\": \"Test Author 1\",\n        \"title\": \"Test Title 1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{scheme}}{{domain}}/api/book-list/2/book",
+							"host": [
+								"{{scheme}}{{domain}}"
+							],
+							"path": [
+								"api",
+								"book-list",
+								"2",
+								"book"
+							]
+						},
+						"description": "Create Book and add to BookList Books"
+					},
+					"response": []
+				},
+				{
+					"name": "POST BookList Books",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookIds\": [1,3,2,4]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{scheme}}{{domain}}/api/book-list/2/book",
+							"host": [
+								"{{scheme}}{{domain}}"
+							],
+							"path": [
+								"api",
+								"book-list",
+								"2",
+								"book"
+							]
+						},
+						"description": "Clear and reassign BookList Books by given bookIds that belong to existing Books"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE BookList Book",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}{{domain}}/api/book-list/2/book/5",
+							"host": [
+								"{{scheme}}{{domain}}"
+							],
+							"path": [
+								"api",
+								"book-list",
+								"2",
+								"book",
+								"5"
+							]
+						},
+						"description": "Delete Book from BookList"
+					},
+					"response": []
+				}
+			],
+			"description": "BookList related requests"
+		},
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "GET Book",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{scheme}}{{domain}}/api/book/1",
+							"host": [
+								"{{scheme}}{{domain}}"
+							],
+							"path": [
+								"api",
+								"book",
+								"1"
+							]
+						},
+						"description": "Get Book"
+					},
+					"response": []
+				}
+			],
+			"description": "Book related requests"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
